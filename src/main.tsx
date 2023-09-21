@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Login from './pages/Login.tsx';
+import Logout from './pages/Logout.tsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
     ],
+  },
+  {
+    path: '/logout',
+    element: <Logout />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById('root')!).render(
