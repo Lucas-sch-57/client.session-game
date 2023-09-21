@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Login from './pages/Login.tsx';
 import Logout from './pages/Logout.tsx'
+import AuthGuard from './guards/AuthGuard.tsx'
 const router = createBrowserRouter([
   {
     path: '/',
@@ -18,6 +19,12 @@ const router = createBrowserRouter([
         path: '/login',
         element: <Login />,
       },
+      {
+        path: '/dashboard',
+        element: <AuthGuard>
+          <h1>Dashboard</h1>
+        </AuthGuard>,
+      }
     ],
   },
   {
