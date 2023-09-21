@@ -2,7 +2,7 @@ import { UserContext } from '../ctx/UserContext';
 import { useState } from 'react';
 import { UserProviderProps, UserLogin, User, UserProviderState } from '@/types';
 const UserProvider = ({ children }: UserProviderProps) => {
-    const [user, setUser] = useState<User>(() => {
+    const [user, setUser] = useState<User | null>(() => {
         const storage = localStorage.getItem('user');
         if (storage) return JSON.parse(storage);
         return null;
@@ -24,9 +24,15 @@ const UserProvider = ({ children }: UserProviderProps) => {
         })
     }
 
+    const logout = () => {
+        localStorage.removeItem('user');
+        setUser(null);
+    }
+
     const value: UserProviderState = {
         user,
         login: (user: UserLogin) => { login(user) },
+        logout: () => { logout() }
     }
 
     return (

@@ -14,5 +14,6 @@ export type User = {
 
 export type UserProviderState = {
     user: User | null,
-    login: (user: UserLogin) => void
+    login: (user: UserLogin) => void,
+    logout: () => void
 }
