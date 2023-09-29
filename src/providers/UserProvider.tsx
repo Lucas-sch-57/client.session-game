@@ -25,7 +25,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
     }
 
     const register = async (user: UserRegister) => {
-        await fetch('http://localhost:127.0.0.1:3333/api/register', {
+        await fetch('http://localhost:3333/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
