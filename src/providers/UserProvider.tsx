@@ -1,6 +1,6 @@
 import { UserContext } from '../ctx/UserContext';
 import { useState } from 'react';
-import { UserProviderProps, UserLogin, User, UserProviderState } from '@/types';
+import { UserProviderProps, UserLogin, User, UserProviderState, UserRegister } from '@/types';
 const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<User | null>(() => {
         const storage = localStorage.getItem('user');
@@ -24,6 +24,16 @@ const UserProvider = ({ children }: UserProviderProps) => {
         })
     }
 
+    const register = async (user: UserRegister) => {
+        await fetch('http://localhost:127.0.0.1:3333/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        })
+    }
+
     const logout = () => {
         localStorage.removeItem('user');
         setUser(null);
@@ -32,7 +42,8 @@ const UserProvider = ({ children }: UserProviderProps) => {
     const value: UserProviderState = {
         user,
         login: (user: UserLogin) => { login(user) },
-        logout: () => { logout() }
+        logout: () => { logout() },
+        register: (user: UserRegister) => { register(user) },
     }
 
     return (
