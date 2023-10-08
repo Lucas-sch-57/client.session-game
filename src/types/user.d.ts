@@ -21,7 +21,7 @@ export type User = {
 
 export type UserProviderState = {
     user: User | null,
-    login: (user: UserLogin) => void,
+    login: (user: UserLogin) => Promise<number>,
     logout: () => void,
-    register: (user: UserRegister) => void
+    register: (user: UserRegister) => void,
 }

@@ -32,7 +32,6 @@ const RegisterForm = () => {
     })
 
     const onregisterFormSubmit = (data: z.infer<typeof registerFormSchema>) => {
-        console.log(data);
         register(data);
     }
 

@@ -8,22 +8,23 @@ const UserProvider = ({ children }: UserProviderProps) => {
         return null;
     });
 
-    const login = async (user: UserLogin) => {
-        await fetch('http://127.0.0.1:3333/api/login', {
+    const login = async (user: UserLogin): Promise<number> => {
+        const response = await fetch('http://127.0.0.1:3333/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
-        }).then(async (res) => {
-            if (res.ok) {
-                const data = await res.json();
-                localStorage.setItem('user', JSON.stringify(data.token));
-                setUser(data);
-            }
-        })
-    }
+        });
 
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('user', JSON.stringify(data.token));
+            setUser(data);
+        }
+
+        return response.status
+    }
     const register = async (user: UserRegister) => {
         await fetch('http://localhost:3333/api/register', {
             method: 'POST',
@@ -31,6 +32,8 @@ const UserProvider = ({ children }: UserProviderProps) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
+        }).then((res) => {
+            return res.json();
         })
     }
 
@@ -41,7 +44,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
 
     const value: UserProviderState = {
         user,
-        login: (user: UserLogin) => { login(user) },
+        login: async (user: UserLogin) => await login(user),
         logout: () => { logout() },
         register: (user: UserRegister) => { register(user) },
     }
