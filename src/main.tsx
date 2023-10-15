@@ -10,27 +10,27 @@ import {
 import Login from './pages/Login.tsx';
 import Logout from './pages/Logout.tsx'
 import AuthGuard from './guards/AuthGuard.tsx'
+import Register from './pages/Register.tsx'
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <AuthGuard><App /></AuthGuard>,
     children: [
-      {
-        path: '/login',
-        element: <Login />,
-      },
-      {
-        path: '/dashboard',
-        element: <AuthGuard>
-          <h1>Dashboard</h1>
-        </AuthGuard>,
-      }
+
     ],
+  },
+  {
+    path: '/login',
+    element: <Login />,
   },
   {
     path: '/logout',
     element: <Logout />,
   },
+  {
+    path: '/register',
+    element: <Register />,
+  }
 ]);
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

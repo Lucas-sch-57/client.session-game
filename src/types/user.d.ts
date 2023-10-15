@@ -8,12 +8,20 @@ export type UserLogin = {
     password: string
 }
 
+export type UserRegister = {
+    email: string
+    name: string
+    first_name: string
+    password: string
+}
+
 export type User = {
     token: string
 }
 
 export type UserProviderState = {
     user: User | null,
-    login: (user: UserLogin) => void,
-    logout: () => void
+    login: (user: UserLogin) => Promise<number>,
+    logout: () => void,
+    register: (user: UserRegister) => Promise<Response>
 }

@@ -1,6 +1,6 @@
 import { UserContext } from '../ctx/UserContext';
 import { useState } from 'react';
-import { UserProviderProps, UserLogin, User, UserProviderState } from '@/types';
+import { UserProviderProps, UserLogin, User, UserProviderState, UserRegister } from '@/types';
 const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<User | null>(() => {
         const storage = localStorage.getItem('user');
@@ -8,20 +8,33 @@ const UserProvider = ({ children }: UserProviderProps) => {
         return null;
     });
 
-    const login = async (user: UserLogin) => {
-        await fetch('http://127.0.0.1:3333/api/login', {
+    const login = async (user: UserLogin): Promise<number> => {
+        const response = await fetch('http://127.0.0.1:3333/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
-        }).then(async (res) => {
-            if (res.ok) {
-                const data = await res.json();
-                localStorage.setItem('user', JSON.stringify(data.token));
-                setUser(data);
-            }
-        })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('user', JSON.stringify(data.token));
+            setUser(data);
+        }
+
+        return response.status
+    }
+    const register = async (user: UserRegister): Promise<Response> => {
+        const response = await fetch('http://127.0.0.1:3333/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+        });
+
+        return response;
     }
 
     const logout = () => {
@@ -31,8 +44,9 @@ const UserProvider = ({ children }: UserProviderProps) => {
 
     const value: UserProviderState = {
         user,
-        login: (user: UserLogin) => { login(user) },
-        logout: () => { logout() }
+        login: async (user: UserLogin) => await login(user),
+        logout: () => { logout() },
+        register: async (user: UserRegister) => await register(user),
     }
 
     return (

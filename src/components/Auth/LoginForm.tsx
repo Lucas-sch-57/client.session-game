@@ -12,7 +12,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from 'react-hook-form';
 import useUser from '@/hooks/useUser';
+import { useState } from 'react';
+import { AlertBox } from '../AlertBox';
 const Loginform = () => {
+    const [error, setError] = useState<boolean>(false);
     const { login } = useUser();
     const loginFormSchema = z.object({
         email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
@@ -27,12 +30,17 @@ const Loginform = () => {
         }
     })
 
-    const onLoginFormSubmit = (data: z.infer<typeof loginFormSchema>) => {
-        login(data);
+    const onLoginFormSubmit = async (data: z.infer<typeof loginFormSchema>) => {
+        login(data).then((res) => {
+            setError(res !== 200);
+        })
     }
 
     return (
         <Form {...loginForm}>
+            {error && (
+                <AlertBox message="Une erreur est survénue lors de la connexion veuillez réessayer" type='error' />
+            )}
             <form onSubmit={loginForm.handleSubmit(onLoginFormSubmit)} className="space-y-8 p-10 border border-secondary-foreground w-full">
                 <FormField
                     control={loginForm.control}
