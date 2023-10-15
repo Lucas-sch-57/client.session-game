@@ -12,7 +12,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from 'react-hook-form';
 import useUser from '@/hooks/useUser';
+import { useState } from 'react';
+import { AlertBox } from '../AlertBox';
 const RegisterForm = () => {
+    const [error, setError] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>("");
     const { register } = useUser();
     const registerFormSchema = z.object({
         email: z.string().email({ message: "Veuillez entrer une adresse email valide" }),
@@ -32,11 +36,22 @@ const RegisterForm = () => {
     })
 
     const onregisterFormSubmit = (data: z.infer<typeof registerFormSchema>) => {
-        register(data);
+        const registerData = register(data);
+        registerData.then((res) => {
+            if (res.status == 400) {
+                res.json().then((resData) => {
+                    setError(true);
+                    setErrorMessage(resData.message);
+                })
+            }
+        })
     }
 
     return (
         <Form {...registerForm}>
+            {error && (
+                <AlertBox message={errorMessage} type='error' />
+            )}
             <form onSubmit={registerForm.handleSubmit(onregisterFormSubmit)} className="space-y-8 p-10 border border-accent-foreground w-full drop-shadow-lg">
                 <FormField
                     control={registerForm.control}
@@ -90,7 +105,7 @@ const RegisterForm = () => {
                         </FormItem>
                     )}
                 />
-                <Button type="submit">Register</Button>
+                <Button type="submit">S'inscrire</Button>
             </form>
         </Form>
     )

@@ -1,3 +1,4 @@
 export type AlertProps = {
-    message: string
+    message: string,
+    type: string,
 }

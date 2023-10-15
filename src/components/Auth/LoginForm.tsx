@@ -39,7 +39,7 @@ const Loginform = () => {
     return (
         <Form {...loginForm}>
             {error && (
-                <AlertBox message="Une erreur est survénue lors de la connexion veuillez réessayer" />
+                <AlertBox message="Une erreur est survénue lors de la connexion veuillez réessayer" type='error' />
             )}
             <form onSubmit={loginForm.handleSubmit(onLoginFormSubmit)} className="space-y-8 p-10 border border-secondary-foreground w-full">
                 <FormField

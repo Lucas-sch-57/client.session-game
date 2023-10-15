@@ -7,9 +7,10 @@ import {
     AlertTitle,
 } from "@/components/ui/alert"
 
-export function AlertBox({ message }: AlertProps) {
+export function AlertBox({ message, type }: AlertProps) {
+    const TYPE = type == 'error' ? 'destructive' : 'default';
     return (
-        <Alert variant="destructive">
+        <Alert variant={TYPE}>
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>

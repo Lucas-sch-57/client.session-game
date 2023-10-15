@@ -25,16 +25,16 @@ const UserProvider = ({ children }: UserProviderProps) => {
 
         return response.status
     }
-    const register = async (user: UserRegister) => {
-        await fetch('http://localhost:3333/api/register', {
+    const register = async (user: UserRegister): Promise<Response> => {
+        const response = await fetch('http://127.0.0.1:3333/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
-        }).then((res) => {
-            return res.json();
-        })
+        });
+
+        return response;
     }
 
     const logout = () => {
@@ -46,7 +46,7 @@ const UserProvider = ({ children }: UserProviderProps) => {
         user,
         login: async (user: UserLogin) => await login(user),
         logout: () => { logout() },
-        register: (user: UserRegister) => { register(user) },
+        register: async (user: UserRegister) => await register(user),
     }
 
     return (
